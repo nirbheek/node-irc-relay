@@ -33,5 +33,18 @@ exports.matchers =  {
             });
         }
     } 
-}
 
+    reddit: {
+        regexes: [/http:\/\/reddit\.com\/r\/.+\/comments\/(.+).*/ , /http:\/\/redd\.it\/(.+).*/],
+
+        responder: function(from, message, match, respond) {
+            var url = "http://www.reddit.com/toolbar/toolbar?id=t3_" + match[1];
+            _.parseRequest({uri: url, cache: match[1]}, function(err, $){
+                if (!err) {
+                    var title = $('head title').text().value();
+                    respond("The title of that reddit link is " + title);
+                }
+            });
+        }
+    } 
+}
